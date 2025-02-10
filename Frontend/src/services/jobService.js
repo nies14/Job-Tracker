@@ -1,12 +1,14 @@
-const API_URL = process.env.REACT_APP_API_URL;
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 export const getAllJobs = async () => {
-  const response = await fetch(API_URL);
+  const url = new URL(BASE_URL);
+  const response = await fetch(url.toString());
   return response.json();
 };
 
 export const createJob = async (jobData) => {
-  const response = await fetch(API_URL, {
+  const url = new URL(BASE_URL);
+  const response = await fetch(url.toString(), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -17,7 +19,8 @@ export const createJob = async (jobData) => {
 };
 
 export const updateJobStatus = async (id, status) => {
-  const response = await fetch(`${API_URL}/${id}`, {
+  const url = new URL(`${BASE_URL}/${id}`);
+  const response = await fetch(url.toString(), {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',

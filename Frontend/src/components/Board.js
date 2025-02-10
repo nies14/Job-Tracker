@@ -2,7 +2,7 @@ import React from 'react';
 import Column from './Column';
 import { COLUMN_IDS, COLUMN_NAMES } from '../utils/constants';
 
-const Board = ({ tasks, onMoveTask }) => {
+const Board = ({ tasks, onMoveTask, onDelete }) => {
   return (
     <div className="board">
       {Object.entries(COLUMN_NAMES).map(([columnId, title]) => (
@@ -12,6 +12,7 @@ const Board = ({ tasks, onMoveTask }) => {
           title={title}
           tasks={tasks[columnId] || []}
           moveTask={onMoveTask}
+          onDelete={onDelete}
         />
       ))}
     </div>

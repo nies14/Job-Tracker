@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDrag } from 'react-dnd';
 
-const Card = ({ task, fromColumn }) => {
+const Card = ({ task, fromColumn, onDelete }) => {
   if (!task) return null;
 
   const [{ isDragging }, drag] = useDrag(() => ({
@@ -26,9 +26,20 @@ const Card = ({ task, fromColumn }) => {
         cursor: 'move'
       }}
     >
-      <div className="card-field">
-        <span className="field-label">Company Name:</span>
-        <h3>{task.companyName}</h3>
+      <div className="card-header">
+        <div className="card-field">
+          <span className="field-label">Company Name:</span>
+          <h3>{task.companyName}</h3>
+        </div>
+        <button 
+          className="delete-button"
+          onClick={(e) => {
+            e.stopPropagation();
+            onDelete(task._id);
+          }}
+        >
+          ×
+        </button>
       </div>
       <div className="card-field">
         <span className="field-label">Job Description:</span>

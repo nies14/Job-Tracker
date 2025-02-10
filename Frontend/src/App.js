@@ -4,7 +4,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import Board from './components/Board';
 import AddJobForm from './components/AddJobForm';
 import { COLUMN_IDS } from './utils/constants';
-import { getAllJobs, createJob, updateJobStatus } from './services/jobService';
+import { getAllJobs, createJob, updateJobStatus, deleteJob } from './services/jobService';
 
 const App = () => {
   const [tasks, setTasks] = useState({
@@ -74,6 +74,21 @@ const App = () => {
     }
   };
 
+  const handleDeleteTask = async (taskId) => {
+    try {
+      await deleteJob(taskId);
+      setTasks(prev => {
+        const newTasks = { ...prev };
+        Object.keys(newTasks).forEach(columnId => {
+          newTasks[columnId] = newTasks[columnId].filter(task => task._id !== taskId);
+        });
+        return newTasks;
+      });
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
+  };
+
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="App">
@@ -82,7 +97,11 @@ const App = () => {
           <p>Organize and track your job applications in one place</p>
         </div>
         <AddJobForm onAddTask={handleAddTask} />
-        <Board tasks={tasks} onMoveTask={handleMoveTask} />
+        <Board 
+          tasks={tasks} 
+          onMoveTask={handleMoveTask} 
+          onDelete={handleDeleteTask}
+        />
       </div>
     </DndProvider>
   );

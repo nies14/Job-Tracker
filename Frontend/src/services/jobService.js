@@ -29,3 +29,14 @@ export const updateJobStatus = async (id, status) => {
   });
   return response.json();
 };
+
+export const deleteJob = async (id) => {
+  const url = new URL(`${BASE_URL}/${id}`);
+  const response = await fetch(url.toString(), {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  return response.json();
+};

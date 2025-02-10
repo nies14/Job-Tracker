@@ -17,6 +17,11 @@ const jobSchema = new mongoose.Schema({
     type: String,
     enum: ['details', 'inProgress', 'accepted', 'rejected'],
     default: 'details'
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   }
 }, {
   timestamps: true

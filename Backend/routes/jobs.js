@@ -1,10 +1,14 @@
 const router = require('express').Router();
 const Job = require('../models/Job');
+const auth = require('../middleware/auth');
 
-// Get all jobs
+// Protect all routes with auth middleware
+router.use(auth);
+
+// Get all jobs for the logged-in user
 router.get('/', async (req, res) => {
   try {
-    const jobs = await Job.find();
+    const jobs = await Job.find({ user: req.user._id });
     res.json(jobs);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -14,10 +18,8 @@ router.get('/', async (req, res) => {
 // Add new job
 router.post('/', async (req, res) => {
   const job = new Job({
-    companyName: req.body.companyName,
-    jobDescription: req.body.jobDescription,
-    notes: req.body.notes,
-    status: req.body.status
+    ...req.body,
+    user: req.user._id
   });
 
   try {
@@ -28,16 +30,17 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Update job status
+// Update job
 router.patch('/:id', async (req, res) => {
   try {
-    const job = await Job.findById(req.params.id);
-    if (req.body.status) {
-      job.status = req.body.status;
+    const job = await Job.findOne({ _id: req.params.id, user: req.user._id });
+    if (!job) {
+      return res.status(404).json({ message: 'Job not found' });
     }
-    if (req.body.notes) {
-      job.notes = req.body.notes;
-    }
+
+    if (req.body.status) job.status = req.body.status;
+    if (req.body.notes) job.notes = req.body.notes;
+
     const updatedJob = await job.save();
     res.json(updatedJob);
   } catch (err) {
@@ -48,7 +51,13 @@ router.patch('/:id', async (req, res) => {
 // Delete job
 router.delete('/:id', async (req, res) => {
   try {
-    await Job.findByIdAndDelete(req.params.id);
+    const job = await Job.findOneAndDelete({ 
+      _id: req.params.id, 
+      user: req.user._id 
+    });
+    if (!job) {
+      return res.status(404).json({ message: 'Job not found' });
+    }
     res.json({ message: 'Job deleted' });
   } catch (err) {
     res.status(500).json({ message: err.message });

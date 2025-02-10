@@ -3,8 +3,12 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import Board from './components/Board';
 import AddJobForm from './components/AddJobForm';
+import LoginForm from './components/LoginForm';
+import Modal from './components/Modal';
+import RegisterForm from './components/RegisterForm';
 import { COLUMN_IDS } from './utils/constants';
 import { getAllJobs, createJob, updateJobStatus, deleteJob } from './services/jobService';
+import { getAuthCookie, clearAuthCookie } from './services/authService';
 
 const App = () => {
   const [tasks, setTasks] = useState({
@@ -13,9 +17,17 @@ const App = () => {
     [COLUMN_IDS.ACCEPTED]: [],
     [COLUMN_IDS.REJECTED]: []
   });
+  const [user, setUser] = useState(null);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showAuthWarning, setShowAuthWarning] = useState(false);
+  const [isLoginForm, setIsLoginForm] = useState(true);
 
   useEffect(() => {
-    loadJobs();
+    const { token, user } = getAuthCookie();
+    if (token && user) {
+      setUser(user);
+      loadJobs();
+    }
   }, []);
 
   const loadJobs = async () => {
@@ -39,7 +51,27 @@ const App = () => {
     }
   };
 
+  const handleLogin = (userData) => {
+    setUser(userData);
+    loadJobs();
+  };
+
+  const handleLogout = () => {
+    clearAuthCookie();
+    setUser(null);
+    setTasks({
+      [COLUMN_IDS.DETAILS]: [],
+      [COLUMN_IDS.IN_PROGRESS]: [],
+      [COLUMN_IDS.ACCEPTED]: [],
+      [COLUMN_IDS.REJECTED]: []
+    });
+  };
+
   const handleAddTask = async (task) => {
+    if (!user) {
+      setShowAuthWarning(true);
+      return;
+    }
     try {
       const newJob = await createJob({
         ...task,
@@ -89,12 +121,35 @@ const App = () => {
     }
   };
 
+  const handleRegister = (userData) => {
+    setUser(userData);
+    loadJobs();
+  };
+
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="App">
         <div className="app-header">
-          <h1>Job Application Tracker</h1>
-          <p>Organize and track your job applications in one place</p>
+          <div className="header-content">
+            <div className="title-section">
+              <h1>Job Application Tracker</h1>
+              <p>Organize and track your job applications in one place</p>
+            </div>
+            <div className="auth-section">
+              {user ? (
+                <div className="user-info">
+                  <span>Welcome, {user.email}</span>
+                  <button onClick={handleLogout} className="logout-button">
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <button onClick={() => setShowLogin(true)} className="login-button">
+                  Login
+                </button>
+              )}
+            </div>
+          </div>
         </div>
         <AddJobForm onAddTask={handleAddTask} />
         <Board 
@@ -102,6 +157,36 @@ const App = () => {
           onMoveTask={handleMoveTask} 
           onDelete={handleDeleteTask}
         />
+        
+        <Modal isOpen={showLogin} onClose={() => {
+          setShowLogin(false);
+          setIsLoginForm(true);
+        }}>
+          {isLoginForm ? (
+            <LoginForm 
+              onLogin={handleLogin} 
+              onClose={() => setShowLogin(false)}
+              switchToRegister={() => setIsLoginForm(false)}
+            />
+          ) : (
+            <RegisterForm
+              onRegister={handleRegister}
+              onClose={() => setShowLogin(false)}
+              switchToLogin={() => setIsLoginForm(true)}
+            />
+          )}
+        </Modal>
+
+        <Modal isOpen={showAuthWarning} onClose={() => setShowAuthWarning(false)}>
+          <div className="auth-warning">
+            <h3>Authentication Required</h3>
+            <p>Please login to add or modify jobs.</p>
+            <button onClick={() => {
+              setShowAuthWarning(false);
+              setShowLogin(true);
+            }}>Login</button>
+          </div>
+        </Modal>
       </div>
     </DndProvider>
   );

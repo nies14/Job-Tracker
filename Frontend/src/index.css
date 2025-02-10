@@ -1,0 +1,188 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.app-header {
+  text-align: center;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  color: white;
+  margin-bottom: 20px;
+}
+
+.app-header h1 {
+  font-size: 2.5em;
+  margin: 0;
+  margin-bottom: 10px;
+  font-weight: 600;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.app-header p {
+  font-size: 1.2em;
+  margin: 0;
+  opacity: 0.9;
+}
+
+.board {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.column {
+  width: 22%;
+  background-color: #f0f0f0;
+  padding: 10px;
+  margin: 0 1%;
+  border-radius: 5px;
+  min-height: 300px;
+  transition: background-color 0.2s ease;
+}
+
+.card {
+  background-color: white;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: opacity 0.2s ease;
+  cursor: move;
+}
+
+.card:hover {
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+}
+
+.notes-input {
+  width: calc(100% - 16px);
+  min-height: 60px;
+  max-height: 150px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  resize: vertical;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.notes-input:focus {
+  border-color: #999;
+  outline: none;
+}
+
+.notes-text {
+  margin-top: 8px;
+  padding: 8px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  color: #666;
+  font-size: 14px;
+}
+
+.add-job-form {
+  width: 95%;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 15px;
+}
+
+.left-column, .right-column {
+  width: 50%;
+}
+
+.left-column .input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.right-column .notes-input {
+  width: 100%;
+  height: 100%;
+  min-height: 85px;
+}
+
+.add-job-form input,
+.add-job-form textarea {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.add-job-form button {
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  width: 100%;
+}
+
+.add-job-form button:hover {
+  background-color: #45a049;
+}
+
+.form-columns {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 15px;
+}
+
+.form-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-column .notes-input {
+  height: 100%;
+  min-height: 82px; /* Matches height of two inputs + gap */
+}
+
+.card h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+}
+
+.card p {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.card-field {
+  margin-bottom: 8px;
+}
+
+.field-label {
+  font-weight: 600;
+  color: #333;
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.card-field h3 {
+  margin: 4px 0;
+  color: #2a5298;
+}
+
+.card-field p {
+  margin: 4px 0;
+}

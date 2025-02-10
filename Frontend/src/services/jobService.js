@@ -1,6 +1,4 @@
-const API_URL = process.env.NODE_ENV === 'production'
-  ? 'your_railway_url/api/jobs'
-  : 'http://localhost:5000/api/jobs';
+const API_URL = process.env.REACT_APP_API_URL;
 
 export const getAllJobs = async () => {
   const response = await fetch(API_URL);

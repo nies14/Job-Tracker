@@ -7,7 +7,8 @@ const AddJobForm = ({ onAddTask }) => {
     notes: ''
   });
 
-  const handleAddTask = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     if (newTask.companyName.trim() && newTask.jobDescription.trim()) {
       onAddTask(newTask);
       setNewTask({ companyName: '', jobDescription: '', notes: '' });
@@ -15,7 +16,7 @@ const AddJobForm = ({ onAddTask }) => {
   };
 
   return (
-    <div className="add-job-form">
+    <form className="add-job-form" onSubmit={handleSubmit}>
       <div className="form-row">
         <div className="left-column">
           <div className="input-group">
@@ -24,12 +25,18 @@ const AddJobForm = ({ onAddTask }) => {
               placeholder="Company Name"
               value={newTask.companyName}
               onChange={(e) => setNewTask({...newTask, companyName: e.target.value})}
+              required
+              minLength="2"
+              title="Please enter the company name"
             />
             <input
               type="text"
               placeholder="Job Description"
               value={newTask.jobDescription}
               onChange={(e) => setNewTask({...newTask, jobDescription: e.target.value})}
+              required
+              minLength="2"
+              title="Please enter the job description"
             />
           </div>
         </div>
@@ -42,8 +49,8 @@ const AddJobForm = ({ onAddTask }) => {
           />
         </div>
       </div>
-      <button onClick={handleAddTask}>Add Job</button>
-    </div>
+      <button type="submit">Add Job</button>
+    </form>
   );
 };
 

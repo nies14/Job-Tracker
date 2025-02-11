@@ -1,11 +1,11 @@
 import Cookies from 'js-cookie';
 
-const BASE_URL = process.env.REACT_APP_API_BASE_URL 
-  ? `${process.env.REACT_APP_API_BASE_URL}/auth`
+const BASE_URL = process.env.REACT_APP_URL 
+  ? `${process.env.REACT_APP_URL}/auth`
   : 'http://localhost:5000/api/auth';
 
 console.log('Auth Service BASE_URL:', BASE_URL);
-console.log('Environment variable:', process.env.REACT_APP_API_BASE_URL);
+console.log('Environment variable:', process.env.REACT_APP_URL);
 
 export const setAuthCookie = (token, user) => {
   Cookies.set('token', token, { expires: 7 }); // expires in 7 days

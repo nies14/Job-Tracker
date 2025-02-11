@@ -1,11 +1,10 @@
 import Cookies from 'js-cookie';
 
-const BASE_URL = process.env.REACT_APP_API_BASE_URL 
-  ? `${process.env.REACT_APP_API_BASE_URL}/jobs`
+const BASE_URL = process.env.REACT_APP_URL 
+  ? `${process.env.REACT_APP_URL}/jobs`
   : 'http://localhost:5000/api/jobs';
 
 console.log('Job Service BASE_URL:', BASE_URL);
-console.log('Environment variable:', process.env.REACT_APP_API_BASE_URL);
 
 const getHeaders = () => {
   const token = Cookies.get('token');
